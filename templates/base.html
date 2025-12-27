@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Healthcare Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <nav class="navbar">
+        <a href="{{ url_for('auth.dashboard') }}" class="navbar-brand">🏥 CHS Bangladesh</a>
+        
+        <ul class="navbar-menu">
+            {% if current_user.role == 'ADMIN' %}
+                <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin.departments') }}">Departments</a></li>
+                <li><a href="{{ url_for('admin.labs') }}">Labs</a></li>
+                <li><a href="{{ url_for('admin.doctors') }}">Doctors</a></li>
+                <li><a href="{{ url_for('admin.pharmacy_stock') }}">Pharmacy Stock</a></li>
+            {% elif current_user.role == 'DOCTOR' %}
+                <li><a href="{{ url_for('doctor.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('doctor.appointments') }}">Appointments</a></li>
+                <li><a href="{{ url_for('doctor.order_lab_test') }}">Order Lab Test</a></li>
+            {% elif current_user.role == 'PATIENT' %}
+                <li><a href="{{ url_for('patient.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('patient.profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('patient.appointments') }}">Appointments</a></li>
+                <li><a href="{{ url_for('patient.bills') }}">Bills</a></li>
+            {% endif %}
+        </ul>
+        
+        <div class="navbar-user">
+            <span>{{ current_user.username }} ({{ current_user.get_role_display() }})</span>
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{% if category == 'error' %}error{% else %}{{ category }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
