@@ -335,3 +335,5 @@ For issues or questions, refer to the documentation files or contact the develop
 ---
 
 **Note**: This project uses **explicit raw MySQL queries** throughout. All database operations are visible in the code for educational purposes.
+#   h e a l t h c a r e - m a n a g e m e n t - s y s t e m  
+ 
